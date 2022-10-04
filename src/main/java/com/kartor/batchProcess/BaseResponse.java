@@ -8,9 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-/**
- * Created by s.g. on 05/12/16.
- */
 @Data
 @Builder
 @NoArgsConstructor

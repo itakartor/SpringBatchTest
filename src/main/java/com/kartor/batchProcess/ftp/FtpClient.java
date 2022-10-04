@@ -10,9 +10,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class FtpSailpostClient {
+public class FtpClient {
 
-    Logger logger = LoggerFactory.getLogger(FtpSailpostClient.class);
+    Logger logger = LoggerFactory.getLogger(FtpClient.class);
     private String fileSeparator;
 
     private String server;
@@ -24,7 +24,7 @@ public class FtpSailpostClient {
     private boolean letturaFatta = false;
 
     // constructor
-    public FtpSailpostClient(String server, int port, String user, String password, String path, String fileSeparator) {
+    public FtpClient(String server, int port, String user, String password, String path, String fileSeparator) {
         this.server = server;
         this.port = port;
         this.user = user;

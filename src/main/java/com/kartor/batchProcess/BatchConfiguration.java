@@ -1,7 +1,7 @@
 package com.kartor.batchProcess;
 
 import com.kartor.batchProcess.ftp.CoperturaFtpDTO;
-import com.kartor.batchProcess.ftp.FtpSailpostClient;
+import com.kartor.batchProcess.ftp.FtpClient;
 import com.kartor.batchProcess.job.CoperturaItemProcessor;
 import com.kartor.batchProcess.job.CoperturaItemReader;
 import com.kartor.batchProcess.job.CoperturaItemWriter;
@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import java.util.Date;
 import java.util.List;
 
 @EnableBatchProcessing
@@ -28,23 +27,23 @@ import java.util.List;
 @Slf4j
 public class BatchConfiguration {
 
-    @Value("${ftp.sailpost.file.coperture.separator:/}")
-    private String ftpSailpostFileSeparator;
+    @Value("${ftp.file.coperture.separator:/}")
+    private String ftpFileSeparator;
 
-    @Value("${ftp.sailpost.coperture.url}")
-    private String ftpSailpostUrl;
+    @Value("${ftp.coperture.url}")
+    private String ftpUrl;
 
-    @Value("${ftp.sailpost.coperture.port}")
-    private Integer ftpSailpostPort;
+    @Value("${ftp.coperture.port}")
+    private Integer ftpPort;
 
-    @Value("${ftp.sailpost.coperture.user}")
-    private String ftpSailpostUser;
+    @Value("${ftp.coperture.user}")
+    private String ftpUser;
 
-    @Value("${ftp.sailpost.coperture.password}")
-    private String ftpSailpostPassword;
+    @Value("${ftp.coperture.password}")
+    private String ftpPassword;
 
-    @Value("${ftp.sailpost.upload.coperture.path}")
-    private String ftpSailpostBasePath;
+    @Value("${ftp.upload.coperture.path}")
+    private String ftpBasePath;
 
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
@@ -62,9 +61,9 @@ public class BatchConfiguration {
     }
 
     @Bean
-    @Qualifier("ftpSailpostClient")
-    public FtpSailpostClient ftpSailpostClient() {
-        return new FtpSailpostClient(ftpSailpostUrl, ftpSailpostPort, ftpSailpostUser, ftpSailpostPassword, ftpSailpostBasePath, ftpSailpostFileSeparator);
+    @Qualifier("ftpClient")
+    public FtpClient ftpClient() {
+        return new FtpClient(ftpUrl, ftpPort, ftpUser, ftpPassword, ftpBasePath, ftpFileSeparator);
     }
 
     @Bean

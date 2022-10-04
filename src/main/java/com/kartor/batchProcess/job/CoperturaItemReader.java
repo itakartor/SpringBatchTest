@@ -1,17 +1,15 @@
 package com.kartor.batchProcess.job;
 
 import com.kartor.batchProcess.ftp.CoperturaFtpDTO;
-import com.kartor.batchProcess.ftp.FtpSailpostClient;
+import com.kartor.batchProcess.ftp.FtpClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.poi.ss.usermodel.*;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,24 +23,24 @@ import java.util.Locale;
 public class CoperturaItemReader<T> implements ItemReader<List<CoperturaFtpDTO>> {
 
     @Autowired
-    FtpSailpostClient ftpSailpostClient;
+    FtpClient ftpClient;
 
     public final static List<String> FORMATO_COLONNE_COPERTURE = List.of("cap","località","provincia","codunivage","codpuntoposta","tipologia","area","customer_code");
 
     @Override
     public List<CoperturaFtpDTO> read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        if(!ftpSailpostClient.isLetturaFatta()) {
-            ftpSailpostClient.setLetturaFatta(true);
+        if(!ftpClient.isLetturaFatta()) {
+            ftpClient.setLetturaFatta(true);
             try {
-                ftpSailpostClient.open();
+                ftpClient.open();
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 for (FTPFile ftpFile :
-                        ftpSailpostClient.getFtpClient().listFiles()) {
+                        ftpClient.getFtpClient().listFiles()) {
                     log.info("++++++++++++++++" + ftpFile.getName());
                 }
                 String filePath = "/COPERTURA_STANDARD/XLS/COPERTURA.xls";
-                boolean result = ftpSailpostClient.getFileFromPath(baos, filePath);
+                boolean result = ftpClient.getFileFromPath(baos, filePath);
                 if (!result) {
                     StringBuilder sb = new StringBuilder();
                     sb.append("non e' stato possibile trovare il file specificato ").append(filePath);
@@ -56,7 +54,7 @@ public class CoperturaItemReader<T> implements ItemReader<List<CoperturaFtpDTO>>
                 throw e;
             } finally {
                 log.info("chiudo l'ftp");
-                ftpSailpostClient.close();
+                ftpClient.close();
             }
         }
         return null;
